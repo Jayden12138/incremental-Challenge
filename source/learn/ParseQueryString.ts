@@ -30,14 +30,12 @@ function ParseQueryString<Str extends string>(
 	queryStr: Str
 ): ParseQueryString<Str>
 function ParseQueryString(queryStr: string): Record<string, any> {
-	if (!queryStr || !queryStr.length) {
-		return {}
-	}
-
 	const queryObj = {} as Record<string, any>
-	const items = queryStr.split('&')
-	items.forEach(item => {
-		const [key, value] = item.split('=')
+	const params = new URLSearchParams(queryStr)
+	params.forEach((k, v) => {
+		let key = decodeURI(k).toLowerCase()
+		let value = decodeURI(v)
+
 		if (queryObj[key]) {
 			if (Array.isArray(queryObj[key])) {
 				queryObj[key].push(value)
