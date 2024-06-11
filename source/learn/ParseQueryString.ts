@@ -19,7 +19,7 @@ type Merge<T extends Record<string, any>, U extends Record<string, any>> = {
 
 type ParseStr<Str extends string> = Str extends `${infer Key}=${infer Value}`
 	? { [K in Key]: Value }
-	: {}
+	: Record<string, any>
 
 type ParseQueryString<Str extends string> =
 	Str extends `${infer A}&${infer Rest}`
@@ -33,8 +33,8 @@ function ParseQueryString(queryStr: string): Record<string, any> {
 	const queryObj = {} as Record<string, any>
 	const params = new URLSearchParams(queryStr)
 	params.forEach((k, v) => {
-		let key = decodeURI(k).toLowerCase()
-		let value = decodeURI(v)
+		let key = decodeURIComponent(k).toLowerCase()
+		let value = decodeURIComponent(v)
 
 		if (queryObj[key]) {
 			if (Array.isArray(queryObj[key])) {
